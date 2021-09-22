@@ -114,3 +114,24 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+# REACT
+/ERCreator/frontend/node_modules
+
+# testing
+/ERCreator/frontend/coverage
+
+# production
+/ERCreator/frontend/build
+
+# misc
+/ERCreator/frontend/.DS_Store
+/ERCreator/frontend/.env.local
+/ERCreator/frontend/.env.development.local
+/ERCreator/frontend/.env.test.local
+/ERCreator/frontend/.env.production.local
+
+/ERCreator/frontend/npm-debug.log*
+/ERCreator/frontend/yarn-debug.log*
+/ERCreator/frontend/yarn-error.log*
+
