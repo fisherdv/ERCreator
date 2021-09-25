@@ -2,30 +2,33 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
-import { updateERModels } from "../api/erModels";
+import { updateERModels, createERModels } from "../api/erModels";
 
-const defaultEditModel = {
+const defaultErModel = {
   name: "",
   comment: "",
   entities: [],
 };
 
 const ModelDetailCard = ({ model, onSave, onClickCancel }) => {
-  const [editModel, setEditModel] = useState(defaultEditModel);
+  const [editModel, setEditModel] = useState(defaultErModel);
 
   useEffect(() => {
-    setEditModel({ ...model });
+    if (model !== null) {
+      setEditModel({ ...model });
+    }
   }, [model]);
 
   const saveModel = (event) => {
     event.preventDefault();
-    updateERModels(editModel)
-      .then((response) => {        
-        setEditModel({...response.data});
+    const func = model !== null ? updateERModels : createERModels;
+    func(editModel)
+      .then((response) => {
+        setEditModel({ ...response.data });
         onSave(response.data);
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
       });
   };
 

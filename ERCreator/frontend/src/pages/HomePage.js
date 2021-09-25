@@ -7,11 +7,12 @@ import Col from "react-bootstrap/Col";
 import ModelListCard from "../components/ModelListCard";
 import ModelDetailCard from "../components/ModelDetailCard";
 import ModelEditCard from "../components/ModelEditCard";
+import { createERModels } from "../api/erModels";
 
-const defaultCurrentModel = {
-  key: null,
+const defaultErModel = {
   name: "",
   comment: "",
+  entities: [],
 };
 
 const HomePage = () => {
@@ -21,7 +22,7 @@ const HomePage = () => {
 
   useEffect(() => {
     getERModels()
-      .then((response) => {        
+      .then((response) => {
         setErModels(response.data);
       })
       .catch((error) => {
@@ -34,11 +35,20 @@ const HomePage = () => {
     setCurrentModelKey(index);
   };
 
-  const onEditModel = (erModel) => {
+  const onEditModel = (data) => {
     setIsEdit(false);
     let newErModels = [...erModels];
-    newErModels[currentModelKey] = erModel;
+    if (currentModelKey !== null) {
+      newErModels[currentModelKey] = data;
+    } else {
+      newErModels.push(data);
+    }
     setErModels(newErModels);
+  };
+
+  const createModel = () => {
+    setIsEdit(true);
+    setCurrentModelKey(null);
   };
 
   return (
@@ -51,28 +61,32 @@ const HomePage = () => {
               erModels={erModels}
               currentModelKey={currentModelKey}
               choiseModel={choiseModel}
+              onClickCreate={createModel}
             />
           </Col>
-          {currentModelKey !== null ? (
-            <Col sm="8" lg="10">
-              {isEdit ? (
-                <ModelEditCard
-                  model={erModels[currentModelKey]}
-                  onSave={onEditModel}
-                  onClickCancel={() => {
-                    setIsEdit(false);
-                  }}
-                />
-              ) : (
-                <ModelDetailCard
-                  model={erModels[currentModelKey]}
-                  onClickEdit={() => {
-                    setIsEdit(true);
-                  }}
-                />
-              )}
-            </Col>
-          ) : null}
+
+          <Col sm="8" lg="10">
+            {isEdit ? (
+              <ModelEditCard
+                model={
+                  currentModelKey !== null ? erModels[currentModelKey] : null
+                }
+                onSave={onEditModel}
+                onClickCancel={() => {
+                  setIsEdit(false);
+                }}
+              />
+            ) : (
+              <ModelDetailCard
+                model={
+                  currentModelKey !== null ? erModels[currentModelKey] : null
+                }
+                onClickEdit={() => {
+                  setIsEdit(true);
+                }}
+              />
+            )}
+          </Col>
         </Row>
       </Container>
     </Fragment>

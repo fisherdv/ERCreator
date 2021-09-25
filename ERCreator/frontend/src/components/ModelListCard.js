@@ -6,12 +6,12 @@ import Card from "react-bootstrap/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-const ModelListCard = ({erModels, currentModelKey, choiseModel}) => {
+const ModelListCard = ({erModels, currentModelKey, choiseModel, onClickCreate}) => {
   return (
     <Card>
       <Card.Header className="d-flex align-items-center justify-content-between">
         <span>Models</span>
-        <Button variant="link" size="sm" className="float-end">
+        <Button variant="link" size="sm" className="float-end" onClick={onClickCreate}>
           <FontAwesomeIcon icon={faPlus} />
         </Button>
       </Card.Header>
