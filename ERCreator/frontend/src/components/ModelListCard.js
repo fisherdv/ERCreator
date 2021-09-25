@@ -6,7 +6,7 @@ import Card from "react-bootstrap/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-const ModelListCard = ({erModels, currentModel, choiseModel}) => {
+const ModelListCard = ({erModels, currentModelKey, choiseModel}) => {
   return (
     <Card>
       <Card.Header className="d-flex align-items-center justify-content-between">
@@ -20,7 +20,7 @@ const ModelListCard = ({erModels, currentModel, choiseModel}) => {
           {erModels.map((e, i) => (
             <ListGroup.Item
               action
-              active={i === currentModel.key}
+              active={i === currentModelKey}
               key={i}
               onClick={() => choiseModel(i)}
             >
