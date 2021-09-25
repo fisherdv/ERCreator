@@ -18,6 +18,7 @@ const refreshToken = (refreshToken) => {
 }
 
 instance.interceptors.response.use(request => request, async (error) => {
+  // && error.config.url !== "/api/token/refresh/"
   if (!error.config._retry){
     try {
       if (error.response.status === 401 && error.response.data.code === 'token_not_valid'){

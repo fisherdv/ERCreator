@@ -1,7 +1,11 @@
 import instance from "./instance";
 
-export const getERModels = () => {
-  return instance.get("/api/er_models/");
+export const getERModels = (page = 1) => {
+  return instance.get("/api/er_models/", {
+    params: {
+      page: page,
+    },
+  });
 };
 
 export const createERModels = (payload) => {

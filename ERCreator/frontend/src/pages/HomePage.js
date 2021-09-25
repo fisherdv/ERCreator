@@ -15,20 +15,42 @@ const defaultErModel = {
   entities: [],
 };
 
+const defaultPagination = {
+  next: "",
+  previous: "",
+  current_page: 1,
+  num_pages: null,
+};
+
 const HomePage = () => {
   const [erModels, setErModels] = useState([]);
   const [currentModelKey, setCurrentModelKey] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
+  const [pagination, setPagination] = useState(defaultPagination);
 
   useEffect(() => {
     getERModels()
       .then((response) => {
-        setErModels(response.data);
+        console.log(response.data.pagination);
+        setPagination(response.data.pagination);
+        setErModels(response.data.results);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  const onChangePage = (pageNumber) => {
+    setCurrentModelKey(null);
+    getERModels(pageNumber)
+      .then((response) => {
+        setPagination(response.data.pagination);
+        setErModels(response.data.results);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const choiseModel = (index) => {
     setIsEdit(false);
@@ -62,6 +84,8 @@ const HomePage = () => {
               currentModelKey={currentModelKey}
               choiseModel={choiseModel}
               onClickCreate={createModel}
+              pagination={pagination}
+              onChangePage={onChangePage}
             />
           </Col>
 
