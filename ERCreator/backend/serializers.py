@@ -9,6 +9,6 @@ class ERModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ERModel
-        fields = "name", "comment", "entities"
+        fields = "id", "name", "comment", "entities"
         view_name = "er_models"
 
