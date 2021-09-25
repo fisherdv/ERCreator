@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import { signIn } from "../api/auth";
 import { setTokens } from "../localStorage";
 import { useHistory, useLocation } from "react-router-dom";
+import { setToken as apiSetToken } from "../api/instance";
 
 const defaultErrors = {
   username: [],
@@ -24,6 +25,7 @@ const LoginForm = () => {
     event.preventDefault();
     signIn(username, password)
       .then((response) => {
+        apiSetToken(response.data.access);
         setTokens(response.data.access, response.data.refresh);
         history.replace(from);
       })

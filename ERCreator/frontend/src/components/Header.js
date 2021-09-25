@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import { removeTokens, getAccessToken } from "../localStorage";
 import { useHistory } from "react-router-dom";
+import { delToken as apiDelToken } from "../api/instance";
 
 function Header() {
   const history = useHistory();
@@ -13,6 +14,7 @@ function Header() {
   const logout = () => {
     removeTokens();
     history.push("/login");
+    apiDelToken();
   };
 
   const LogoutButton = () => (

@@ -1,44 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import HomePage from "./pages/HomePage";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { getAccessToken } from "./localStorage";
-
-const PrivateRoute = ({ children, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        getAccessToken() ? (
-          children
-        ) : (
-          <Redirect to={{ pathname: "/login", state: { from: location } }} />
-        )
-      }
-    />
-  );
-};
+import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <Switch>
-        <Route path="/login">
-          <LoginPage />
-        </Route>
-        <PrivateRoute path="/">
-          <HomePage />
-        </PrivateRoute>
-      </Switch>
-    </Router>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );
