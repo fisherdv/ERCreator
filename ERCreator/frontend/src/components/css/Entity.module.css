@@ -1,0 +1,12 @@
+.entity {
+    width: 200px;
+    font-size: 13px;
+    position: absolute;    
+}
+
+.no_select {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+ }

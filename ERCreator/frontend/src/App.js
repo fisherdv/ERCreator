@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
+import DesignerPage from "./pages/DesignerPage";
 import { getAccessToken } from "./localStorage";
 import { setToken as apiSetToken } from "./api/instance";
 
@@ -35,6 +36,9 @@ const App = () => {
         <Route path="/login">
           <LoginPage />
         </Route>
+        <PrivateRoute path="/designer/:id">
+          <DesignerPage />
+        </PrivateRoute>
         <PrivateRoute path="/">
           <HomePage />
         </PrivateRoute>

@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import { Link } from "react-router-dom";
 
 const ModelDetailCard = ({ model, onClickEdit }) => {
   return (
@@ -17,9 +18,12 @@ const ModelDetailCard = ({ model, onClickEdit }) => {
               <Button size="sm" onClick={onClickEdit}>
                 edit
               </Button>
-              <Button size="sm" className="ms-1">
+              <Link
+                className="ms-1 btn btn-sm btn-primary"
+                to={`/designer/${model.id}`}
+              >
                 designer
-              </Button>
+              </Link>
             </div>
           </Card.Header>
           <Card.Body>
