@@ -58,6 +58,9 @@ const LoginPage = () => {
                 >
                   Add table
                 </NavDropdown.Item>
+                <NavDropdown.Item>                 
+                  Save model
+                </NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
@@ -72,7 +75,7 @@ const LoginPage = () => {
           </Col>
         </Row>
       </Container>
-      <CreateEntityModal show={modalShow} onHide={() => setModalShow(false)} />
+      <CreateEntityModal types={types} entities={erModel.entities} show={modalShow} onHide={() => setModalShow(false)} />
     </Fragment>
   );
 };
