@@ -1,37 +1,31 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import ListCreateAPIView
 
-from .models import ERModel
-from .serializers import ERModelSerializer
-
-
-class CustomPagination(PageNumberPagination):
-    def get_paginated_response(self, data):
-
-        return Response({
-            'pagination': {
-                'next': self.get_next_link(),
-                'previous': self.get_previous_link(),
-                'current_page': self.page.number,
-                'num_pages': self.page.paginator.num_pages,
-            },
-            'results': data
-        })
+from .paginations import ERModelsPagination
+from .serializers import ERModelDetailSerializer, ERModelSerializer, TypeSerializer
+from .models import Type
 
 
-class LargeResultsSetPagination(CustomPagination):
-    page_size = 5
-    page_size_query_param = 'page_size'
-    max_page_size = 10000
+class TypeListView(ListCreateAPIView):    
+    queryset = Type.objects.all()
+    serializer_class = TypeSerializer    
 
 
 class ERModelsViewSet(ModelViewSet):
-    queryset = ERModel.objects.all()
     serializer_class = ERModelSerializer
+    detail_serializer_class = ERModelDetailSerializer
     filter_backends = [DjangoFilterBackend]
-    pagination_class = LargeResultsSetPagination
+    pagination_class = ERModelsPagination
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        return self.request.user.er_models.all()
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return self.detail_serializer_class
+        return super().get_serializer_class()
+
