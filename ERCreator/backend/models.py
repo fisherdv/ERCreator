@@ -13,8 +13,8 @@ class ERModel(models.Model):
 class Entity(models.Model):
     name = models.CharField(max_length=256)
     comment = models.CharField(max_length=256, null=True, blank=True)
-    # positionX = models.IntegerField(default=0)
-    # positionY = models.IntegerField(default=0)
+    positionX = models.IntegerField(default="0")
+    positionY = models.IntegerField(default="0")
 
 
 class Attribute(models.Model):    

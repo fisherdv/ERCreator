@@ -15,14 +15,14 @@ class TypeSerializer(serializers.ModelSerializer):
 class ERModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = ERModel
-        fields = "id", "name", "comment", "entities"
+        fields = "id", "name", "comment"
         view_name = "er_models"
 
 
 class EntitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entity
-        fields = "id", "name", "comment", "attributes"
+        fields = "id", "name", "comment", "attributes", "positionX", "positionY"
         view_name = "entity"
         depth = 1
 
