@@ -7,13 +7,6 @@ import Col from "react-bootstrap/Col";
 import ModelListCard from "../components/ModelListCard";
 import ModelDetailCard from "../components/ModelDetailCard";
 import ModelEditCard from "../components/ModelEditCard";
-import { createERModels } from "../api/erModels";
-
-const defaultErModel = {
-  name: "",
-  comment: "",
-  entities: [],
-};
 
 const defaultPagination = {
   next: "",
@@ -31,7 +24,6 @@ const HomePage = () => {
   useEffect(() => {
     getERModels()
       .then((response) => {
-        console.log(response.data.pagination);
         setPagination(response.data.pagination);
         setErModels(response.data.results);
       })

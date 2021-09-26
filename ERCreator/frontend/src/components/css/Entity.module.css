@@ -1,5 +1,5 @@
 .entity {
-    width: 200px;
+    min-width: 200px;
     font-size: 13px;
     position: absolute;    
 }

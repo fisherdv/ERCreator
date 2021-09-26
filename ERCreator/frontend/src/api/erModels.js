@@ -8,6 +8,10 @@ export const getERModels = (page = 1) => {
   });
 };
 
+export const getERModel = (id) => {
+  return instance.get(`/api/er_models/${id}/`);
+};
+
 export const createERModels = (payload) => {
   return instance.post("/api/er_models/", payload);
 };
