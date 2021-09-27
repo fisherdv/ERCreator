@@ -30,10 +30,12 @@ class AttributesSerializer(serializers.ModelSerializer):
 
 class EntitySerializer(serializers.ModelSerializer):
     attributes = AttributesSerializer(many=True)
+    id = serializers.IntegerField(required=False)
+    er_model_id = serializers.IntegerField()
 
     class Meta:
         model = Entity
-        fields = "id", "name", "comment", "attributes", "positionX", "positionY"
+        fields = "id", "name", "comment", "attributes", "positionX", "positionY", "er_model_id"
         view_name = "entity"
         depth = 1
 

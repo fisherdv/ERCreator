@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 class ERModel(models.Model):
     name = models.CharField(max_length=256)
     comment = models.CharField(max_length=256, null=True, blank=True)    
-    entities = models.ManyToManyField('Entity', blank=True)    
+    # entities = models.ManyToManyField('Entity', blank=True)    
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="er_models")
 
 
@@ -15,6 +15,7 @@ class Entity(models.Model):
     comment = models.CharField(max_length=256, null=True, blank=True)
     positionX = models.IntegerField(default="0")
     positionY = models.IntegerField(default="0")
+    er_model = models.ForeignKey('ERModel', on_delete=models.CASCADE, related_name="entities")
 
 
 class Attribute(models.Model):    
