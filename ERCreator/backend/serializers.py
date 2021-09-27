@@ -28,6 +28,14 @@ class AttributesSerializer(serializers.ModelSerializer):
         view_name = "attributes"
 
 
+class EntityPositionSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Entity
+        fields = "id", "positionX", "positionY", "er_model_id"
+        view_name = "entity_position"
+        
+
 class EntitySerializer(serializers.ModelSerializer):
     attributes = AttributesSerializer(many=True)
     id = serializers.IntegerField(required=False)
