@@ -1,30 +1,9 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import AttributeTr from "./AttributeTr";
 
-const defaultAttribute = {
-  name: "",
-  default: "",
-  comment: "",
-  id: null,
-  size: null,
-  is_primary_key: null,
-  is_unique: null,
-  is_nullable: null,
-  is_index: null,
-  foreign_key: null,
-  entity: null,
-  type: null,
-}
-
-const AttributesTable = ({ entities, types }) => {
-  const [editAttributets, setEditAttributets] = useState([])
-
-  const pushNewAttribute = () => {
-    setEditAttributets([...editAttributets, { ...defaultAttribute }]);
-  }
-
+const AttributesTable = ({ entities, types, attributes, onChange }) => {
   return (
     <Table striped hover>
       <thead>
@@ -42,18 +21,19 @@ const AttributesTable = ({ entities, types }) => {
         </tr>
       </thead>
       <tbody>
-        {editAttributets.map((e, i) => (
-          <AttributeTr key={i} entities={entities} types={types} />
+        {attributes.map((e, i) => (
+          <AttributeTr key={i} entities={entities} types={types} attribute={e} onChange={(e) => {onChange(e, i)}}/>
         ))}
         <tr>
           <td colSpan="10" className="px-0">
-            <Button size="sm" onClick={pushNewAttribute} >add</Button>
+            <Button name="addAtribute" size="sm" onClick={onChange}>
+              add
+            </Button>
           </td>
         </tr>
       </tbody>
     </Table>
-  )
-}
-
+  );
+};
 
 export default AttributesTable;

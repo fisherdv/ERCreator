@@ -11,9 +11,37 @@ import { getERModel } from "../api/erModels";
 import { getTypes } from "../api/types";
 import { useParams } from "react-router";
 import CreateEntityModal from "../components/CreateEntityModal/index";
+import { indentHeader } from "../config";
+import { createEntity } from "../api/entity";
 
 const defaultErModel = {
   entities: [],
+};
+
+const defaultEntity = () => {
+  return {
+    name: "",
+    comment: "",
+    positionX: 0,
+    positionY: indentHeader,
+    attributes: [],
+  };
+};
+
+const defaultAttribute = () => {
+  return {
+    name: "",
+    default: "",
+    comment: "",
+    size: null,
+    is_primary_key: false,
+    is_unique: false,
+    is_nullable: false,
+    is_index: false,
+    foreign_key: null,
+    entity: null,
+    type: null,
+  };
 };
 
 const LoginPage = () => {
@@ -21,30 +49,68 @@ const LoginPage = () => {
   const [erModel, setErModel] = useState(defaultErModel);
   const [modalShow, setModalShow] = useState(false);
   const [types, setTypes] = useState({});
+  const [editedEntity, setEditedEntity] = useState(defaultEntity());
 
   useEffect(() => {
     (async () => {
-      const [erModelResponse, typesResponse] = await Promise.all([
-        getERModel(id),
-        getTypes(),
-      ]);
-
-      setTypes(
-        typesResponse.data.reduce((a, x) => {
-          a[x.id] = x;
-          return a;
-        }, {})
-      );
-      setErModel(erModelResponse.data);
+      try {
+        const [erModelResponse, typesResponse] = await Promise.all([
+          getERModel(id),
+          getTypes(),
+        ]);
+        setTypes(
+          typesResponse.data.reduce((a, x) => {
+            a[x.id] = x;
+            return a;
+          }, {})
+        );
+        setErModel(erModelResponse.data);
+      } catch (error) {
+        console.log(error);
+      }
     })();
   }, [id]);
 
-  const createEntityHandler = (data) => {
-    let newErModel = { ...erModel };
-    newErModel.entities.push(data)
-    setErModel(newErModel);
-  }
+  const onChangeEditedEntity = (event, key) => {
+    if (key !== undefined) {
+      const value =
+        event.target.type === "checkbox"
+          ? event.target.checked
+          : event.target.value;
 
+      const attribute = editedEntity.attributes[key];
+      editedEntity.attributes[key] = {
+        ...attribute,
+        [event.target.name]: value,
+      };
+      setEditedEntity({ ...editedEntity });
+    } else if (event.target.name === "addAtribute") {
+      editedEntity.attributes.push(defaultAttribute());
+      setEditedEntity({ ...editedEntity });
+    } else {
+      setEditedEntity({
+        ...editedEntity,
+        [event.target.name]: event.target.value,
+      });
+    }
+  };
+
+  const onSaveEditedEntity = () => {
+    createEntity({ ...editedEntity, er_model_id: id })
+      .then((response) => {
+        erModel.entities.push(response.data);
+        setErModel({ ...erModel });
+        setModalShow(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const hideModal = () => {
+    setModalShow(false);
+    setEditedEntity(defaultEntity());
+  };
 
   return (
     <Fragment>
@@ -65,9 +131,7 @@ const LoginPage = () => {
                 >
                   Add table
                 </NavDropdown.Item>
-                <NavDropdown.Item>
-                  Save model
-                </NavDropdown.Item>
+                <NavDropdown.Item>Save model</NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
@@ -82,10 +146,15 @@ const LoginPage = () => {
           </Col>
         </Row>
       </Container>
-      {modalShow ?
-        <CreateEntityModal types={types} onSave={createEntityHandler} entities={erModel.entities} show={modalShow} onHide={() => setModalShow(false)} />
-        : null}
-
+      <CreateEntityModal
+        entity={editedEntity}
+        onChange={onChangeEditedEntity}
+        onSave={onSaveEditedEntity}
+        types={types}
+        entities={erModel.entities}
+        show={modalShow}
+        onHide={hideModal}
+      />
     </Fragment>
   );
 };

@@ -1,42 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import AttributesTable from "./AttributesTable";
 import EntityForm from "./EntityForm";
-import { indentHeader } from "../../config";
-import { createEntity } from "../../api/entity";
-import { useParams } from "react-router";
 
-const defaultEntity = {
-  name: "",
-  comment: "",
-  positionX: 0,
-  positionY: indentHeader,
-  attributes: []
-}
-
-function CreateEntityModal({ show, onHide, types, entities, onSave }) {
-  const [entity, setEntity] = useState(defaultEntity);
-  const { id } = useParams();
-
-  const changeEntityHandler = (e) => {
-    setEntity({
-      ...entity,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const onSaveClick = () => {
-    createEntity({...entity, er_model_id: id}).then(response => {
-      console.log(response.data);
-      onSave(response.data);
-    }).catch(error => {
-      console.log(error);
-    })
-  }
-
+function CreateEntityModal({
+  show,
+  onHide,
+  types,
+  entities,
+  entity,
+  onChange,
+  onSave,
+}) {
   return (
     <Modal
       show={show}
@@ -61,10 +39,15 @@ function CreateEntityModal({ show, onHide, types, entities, onSave }) {
           className="px-3"
         >
           <Tab className="px-3 mt-3" eventKey="table" title="Table">
-            <EntityForm data={entity} onChange={changeEntityHandler} />
+            <EntityForm data={entity} onChange={onChange} />
           </Tab>
           <Tab className="px-3" eventKey="attributes" title="Attributes">
-            <AttributesTable entities={entities} types={types} />
+            <AttributesTable
+              entities={entities}
+              types={types}
+              attributes={entity.attributes}
+              onChange={onChange}
+            />
           </Tab>
         </Tabs>
       </Modal.Body>
@@ -72,7 +55,7 @@ function CreateEntityModal({ show, onHide, types, entities, onSave }) {
         <Button size="sm" onClick={onHide}>
           Close
         </Button>
-        <Button size="sm" variant="success" onClick={onSaveClick}>
+        <Button size="sm" variant="success" onClick={onSave}>
           Save
         </Button>
       </Modal.Footer>

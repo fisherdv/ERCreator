@@ -12,27 +12,30 @@ const instance = axios.create({
 
 
 const refreshToken = (refreshToken) => {
-  return instance.post('/api/token/refresh/', {
+  return axios.post(`${baseURL}/api/token/refresh/`, {
     refresh: refreshToken
   })
 }
 
 instance.interceptors.response.use(request => request, async (error) => {
-  // && error.config.url !== "/api/token/refresh/"
-  if (!error.config._retry){
-    try {
-      if (error.response.status === 401 && error.response.data.code === 'token_not_valid'){
-        error.config._retry = true;    
-        const rq = await refreshToken(getRefreshToken());        
-        setAccessToken(rq.data.access);
-        setToken(rq.data.access);
-        return instance(error.config);
-      }            
-    } catch(_error) {
-      return Promise.reject(_error);
+    const originalConfig = error.config;
+    if (error.response) {    
+      if (error.response.status === 401 && !originalConfig._retry) {
+        originalConfig._retry = true;
+        try {
+          const rq = await refreshToken(getRefreshToken());        
+          setAccessToken(rq.data.access);
+          setToken(rq.data.access);
+          return instance(originalConfig);
+        } catch (_error) {
+          if (_error.response && _error.response.data) {
+            return Promise.reject(_error.response.data);
+          }
+          return Promise.reject(_error);
+        }
+      }      
     }
-  }  
-  return Promise.reject(error);
+    return Promise.reject(error);
 })
 
 export const setToken = (token) => {
