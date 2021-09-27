@@ -50,7 +50,7 @@ const LoginPage = () => {
   const [modalShow, setModalShow] = useState(false);
   const [types, setTypes] = useState({});
   const [editedEntity, setEditedEntity] = useState(defaultEntity());
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -97,8 +97,18 @@ const LoginPage = () => {
   };
 
   const onSaveEditedEntity = () => {
-    const func = edit ? updateEntity : createEntity;
-    func({ ...editedEntity, er_model_id: id })
+    if (edit){
+      updateEntity({ ...editedEntity, er_model_id: id })
+      .then((response) => {
+        erModel.entities[edit] = response.data;
+        setErModel({ ...erModel });
+        setModalShow(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }else{
+      createEntity({ ...editedEntity, er_model_id: id })
       .then((response) => {
         erModel.entities.push(response.data);
         setErModel({ ...erModel });
@@ -107,19 +117,21 @@ const LoginPage = () => {
       .catch((error) => {
         console.log(error);
       });
+    }
+    
   };
 
   const hideModal = () => {
     setModalShow(false);
     setEditedEntity(defaultEntity());
-    setEdit(false);
+    setEdit(null);
   };
 
   const onEdit = (e, key) => {
     const entity = JSON.parse(JSON.stringify(erModel.entities[key]));
     setModalShow(true);
     setEditedEntity({ ...entity });
-    setEdit(true);
+    setEdit(key);
   };
 
   return (
