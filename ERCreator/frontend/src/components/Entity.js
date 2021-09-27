@@ -4,11 +4,11 @@ import Table from "react-bootstrap/Table";
 import styles from "./css/Entity.module.css";
 import { indentHeader, moveArrowIndetX, moveArrowIndetY } from "../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import Attribute from "./Attribute";
 import { changePosition } from "../api/entity";
 
-const Entity = ({ data, types }) => {
+const Entity = ({ data, types, onEdit }) => {
   const [didMount, setDidMount] = useState(false)
   const [isMoving, setIsMoving] = useState(false);
   const [position, setPosition] = useState({
@@ -65,9 +65,12 @@ const Entity = ({ data, types }) => {
     >
       <Card.Header className="py-0 px-1">
         <Card.Title as="div" className="fw-bold mb-1">
-          {data.name}
+          {data.name}          
           <i className="float-end" onMouseDown={onMouseDown}>
             <FontAwesomeIcon icon={faArrowsAlt} />
+          </i>
+          <i className="float-end me-2" onClick={onEdit}>
+            <FontAwesomeIcon icon={faEdit} />
           </i>
         </Card.Title>
         <Card.Subtitle as="div" className="text-center fst-italic text-muted">

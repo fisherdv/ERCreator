@@ -12,7 +12,7 @@ import { getTypes } from "../api/types";
 import { useParams } from "react-router";
 import CreateEntityModal from "../components/CreateEntityModal/index";
 import { indentHeader } from "../config";
-import { createEntity } from "../api/entity";
+import { createEntity, updateEntity } from "../api/entity";
 
 const defaultErModel = {
   entities: [],
@@ -50,6 +50,7 @@ const LoginPage = () => {
   const [modalShow, setModalShow] = useState(false);
   const [types, setTypes] = useState({});
   const [editedEntity, setEditedEntity] = useState(defaultEntity());
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -96,7 +97,8 @@ const LoginPage = () => {
   };
 
   const onSaveEditedEntity = () => {
-    createEntity({ ...editedEntity, er_model_id: id })
+    const func = edit ? updateEntity : createEntity;
+    func({ ...editedEntity, er_model_id: id })
       .then((response) => {
         erModel.entities.push(response.data);
         setErModel({ ...erModel });
@@ -110,6 +112,14 @@ const LoginPage = () => {
   const hideModal = () => {
     setModalShow(false);
     setEditedEntity(defaultEntity());
+    setEdit(false);
+  };
+
+  const onEdit = (e, key) => {
+    const entity = JSON.parse(JSON.stringify(erModel.entities[key]));
+    setModalShow(true);
+    setEditedEntity({ ...entity });
+    setEdit(true);
   };
 
   return (
@@ -140,8 +150,15 @@ const LoginPage = () => {
       <Container fluid className="p-0">
         <Row className="m-0">
           <Col className="m-0 p-0">
-            {erModel.entities.map((e) => (
-              <Entity types={types} data={e} />
+            {erModel.entities.map((e, i) => (
+              <Entity
+                key={i}
+                types={types}
+                data={e}
+                onEdit={(e) => {
+                  onEdit(e, i);
+                }}
+              />
             ))}
           </Col>
         </Row>
