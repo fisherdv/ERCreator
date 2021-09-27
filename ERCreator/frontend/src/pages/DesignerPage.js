@@ -10,7 +10,7 @@ import Col from "react-bootstrap/esm/Col";
 import { getERModel } from "../api/erModels";
 import { getTypes } from "../api/types";
 import { useParams } from "react-router";
-import CreateEntityModal from "../components/CreateEntityModal";
+import CreateEntityModal from "../components/CreateEntityModal/index";
 
 const defaultErModel = {
   entities: [],
@@ -39,6 +39,13 @@ const LoginPage = () => {
     })();
   }, [id]);
 
+  const createEntityHandler = (data) => {
+    let newErModel = { ...erModel };
+    newErModel.entities.push(data)
+    setErModel(newErModel);
+  }
+
+
   return (
     <Fragment>
       <Navbar bg="dark" variant="dark" className="py-0">
@@ -58,7 +65,7 @@ const LoginPage = () => {
                 >
                   Add table
                 </NavDropdown.Item>
-                <NavDropdown.Item>                 
+                <NavDropdown.Item>
                   Save model
                 </NavDropdown.Item>
               </NavDropdown>
@@ -75,7 +82,10 @@ const LoginPage = () => {
           </Col>
         </Row>
       </Container>
-      <CreateEntityModal types={types} entities={erModel.entities} show={modalShow} onHide={() => setModalShow(false)} />
+      {modalShow ?
+        <CreateEntityModal types={types} onSave={createEntityHandler} entities={erModel.entities} show={modalShow} onHide={() => setModalShow(false)} />
+        : null}
+
     </Fragment>
   );
 };

@@ -7,7 +7,6 @@ import { updateERModels, createERModels } from "../api/erModels";
 const defaultErModel = {
   name: "",
   comment: "",
-  entities: [],
 };
 
 const ModelDetailCard = ({ model, onSave, onClickCancel }) => {

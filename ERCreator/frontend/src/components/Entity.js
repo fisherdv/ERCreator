@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import styles from "./css/Entity.module.css";
@@ -6,13 +6,34 @@ import { indentHeader, moveArrowIndetX, moveArrowIndetY } from "../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
 import Attribute from "./Attribute";
+import { changePosition } from "../api/entity";
 
 const Entity = ({ data, types }) => {
+  const [didMount, setDidMount] = useState(false)
   const [isMoving, setIsMoving] = useState(false);
   const [position, setPosition] = useState({
     screenX: 0,
     screenY: indentHeader,
   });
+
+  useEffect(() => setDidMount(true), [])
+
+  useEffect(() => {
+    setPosition({
+      screenX: data.positionX,
+      screenY: data.positionY,
+    })
+  }, [data])
+
+  useEffect(() => {
+    if (didMount && !isMoving) {
+      changePosition(data.id, position.screenX, position.screenY).then(response => {
+        
+      }).catch(error => {
+        console.log(error)
+      })
+    }
+  }, [isMoving])
 
   const onMouseMove = (e) => {
     setPosition({
@@ -45,9 +66,9 @@ const Entity = ({ data, types }) => {
       <Card.Header className="py-0 px-1">
         <Card.Title as="div" className="fw-bold mb-1">
           {data.name}
-          <icon className="float-end" onMouseDown={onMouseDown}>
+          <i className="float-end" onMouseDown={onMouseDown}>
             <FontAwesomeIcon icon={faArrowsAlt} />
-          </icon>
+          </i>
         </Card.Title>
         <Card.Subtitle as="div" className="text-center fst-italic text-muted">
           {data.comment}
@@ -56,8 +77,8 @@ const Entity = ({ data, types }) => {
       <Card.Body className="p-0">
         <Table bordered size="sm" className="mb-0">
           <tbody>
-            {data.attributes.map((e) => (
-              <Attribute types={types} data={e} />
+            {data.attributes.map((e, i) => (
+              <Attribute key={i} types={types} data={e} />
             ))}
           </tbody>
         </Table>

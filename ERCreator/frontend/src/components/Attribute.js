@@ -20,35 +20,35 @@ const Attribute = ({ data, types }) => {
           <div className="d-flex align-items-center justify-content-start">
             {data.is_primary_key ? (
               <i className="pe-1">
-                <FontAwesomeIcon icon={faKey} size="xs" fixedWidtd />
+                <FontAwesomeIcon icon={faKey} size="xs" />
               </i>
             ) : null}
             {data.foreign_key ? (
               <i className="pe-1">
-                <FontAwesomeIcon icon={faLink} size="xs" fixedWidtd />
+                <FontAwesomeIcon icon={faLink} size="xs" />
               </i>
             ) : null}
             {data.is_nullable ? (
               <i className="pe-1">
-                <FontAwesomeIcon icon={faCircle} size="xs" fixedWidtd />
+                <FontAwesomeIcon icon={faCircle} size="xs" />
               </i>
             ) : null}
             {data.is_index ? (
               <i className="pe-1">
-                <FontAwesomeIcon icon={faInfo} size="xs" fixedWidtd />
+                <FontAwesomeIcon icon={faInfo} size="xs" />
               </i>
             ) : null}
             {data.is_unique ? (
               <i className="pe-1">
-                <FontAwesomeIcon icon={faUmbraco} size="xs" fixedWidtd />
+                <FontAwesomeIcon icon={faUmbraco} size="xs" />
               </i>
             ) : null}
           </div>
         </td>
         <td>{data.name}</td>
         <td>
-          {types[data.type].name} 
-          {data.size ? ` (${data.size})` : null}          
+          {types[data.type].name}
+          {data.size ? ` (${data.size})` : null}
         </td>
         <td className="fst-italic fw-lighter">{data.default}</td>
       </tr>
