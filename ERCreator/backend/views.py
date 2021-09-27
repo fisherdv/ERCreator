@@ -3,8 +3,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView
 
 from .paginations import ERModelsPagination
-from .serializers import ERModelDetailSerializer, ERModelSerializer, TypeSerializer
-from .models import Type
+from .serializers import ERModelDetailSerializer, ERModelSerializer, TypeSerializer, EntitySerializer
+from .models import Type, Entity
 
 
 class TypeListView(ListCreateAPIView):    
@@ -28,4 +28,9 @@ class ERModelsViewSet(ModelViewSet):
         if self.action == 'retrieve':
             return self.detail_serializer_class
         return super().get_serializer_class()
+
+
+class EntityViewSet(ModelViewSet):
+    queryset = Entity.objects.all()
+    serializer_class = EntitySerializer
 

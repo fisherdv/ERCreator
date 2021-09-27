@@ -5,11 +5,12 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView
 )
 
-from .views import ERModelsViewSet, TypeListView
+from .views import ERModelsViewSet, TypeListView, EntityViewSet
 
 
 router = DefaultRouter()
 router.register("er_models", ERModelsViewSet, basename="ERModels")
+router.register("entity", EntityViewSet, basename="entity")
 
 
 urlpatterns = [    
